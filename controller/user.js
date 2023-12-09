@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const Task = require('../models/task')
 const jwt = require('jsonwebtoken')
 const expressjwt = require('express-jwt')
 const {validationResult} = require('express-validator')
@@ -113,4 +114,29 @@ const signout = async (req, res) => {
 };
 
 
-module.exports = { signup, authenticateUser, signin, signout}
+// Function to create a new task for a user
+const createTask = async (req, res) => {
+  try {
+    // Extract user input from the request body
+    const { user, title, description, dueDate } = req.body;
+
+    // Create a new task using the Task model
+    const newTask = new Task({
+      user,
+      title,
+      description,
+      dueDate,
+    });
+
+    // Save the task to the database
+    const savedTask = await newTask.save();
+
+    res.status(201).json({ success: true, task: savedTask });
+  } catch (error) {
+    console.error('Error creating task:', error);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+};
+
+
+module.exports = { signup, authenticateUser, signin, signout, createTask}
