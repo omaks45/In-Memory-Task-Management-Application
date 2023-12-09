@@ -139,4 +139,21 @@ const createTask = async (req, res) => {
 };
 
 
-module.exports = { signup, authenticateUser, signin, signout, createTask}
+// Function to get a list of tasks for a user
+const getTasksForUser = async (req, res) => {
+  try {
+    // Extract user ID from the request
+    const userId = req.user._id;
+
+    // Fetch tasks for the specified user
+    const tasks = await Task.find({ user: userId });
+
+    res.status(200).json({ success: true, tasks });
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+};
+
+
+module.exports = { signup, authenticateUser, signin, signout, createTask, getTasksForUser}
