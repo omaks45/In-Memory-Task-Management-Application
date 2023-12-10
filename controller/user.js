@@ -185,4 +185,64 @@ const updateTaskDetails = async (req, res) => {
 };
 
 
-module.exports = { signup, authenticateUser, signin, signout, createTask, getTasksForUser, updateTaskDetails}
+
+// Function to delete a user's task
+const deleteTask = async (req, res) => {
+  try {
+    // Extract user ID from the request
+    const userId = req.user._id;
+
+    // Extract task ID from the request parameters
+    const taskId = req.params.taskId;
+
+    // Find and delete the task by ID and user ID
+    const deletedTask = await Task.findOneAndDelete({ _id: taskId, user: userId });
+
+    if (!deletedTask) {
+      // Task not found or user does not have permission to delete the task
+      return res.status(404).json({ success: false, message: 'Task not found or unauthorized' });
+    }
+
+    res.status(200).json({ success: true, message: 'Task deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting task:', error);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+};
+
+
+// Function to update the status of a user's task
+const updateTaskStatus = async (req, res) => {
+  try {
+    // Extract user ID from the request
+    const userId = req.user._id;
+
+    // Extract task ID and updated status from the request body
+    const { taskId, status } = req.body;
+
+    // Validate that the provided status is either 'Pending' or 'Completed'
+    if (!['Pending', 'Completed'].includes(status)) {
+      return res.status(400).json({ success: false, message: 'Invalid status value' });
+    }
+
+    // Find and update the task by ID and user ID
+    const updatedTask = await Task.findOneAndUpdate(
+      { _id: taskId, user: userId },
+      { $set: { status } },
+      { new: true }
+    );
+
+    if (!updatedTask) {
+      // Task not found or user does not have permission to update the task
+      return res.status(404).json({ success: false, message: 'Task not found or unauthorized' });
+    }
+
+    res.status(200).json({ success: true, task: updatedTask });
+  } catch (error) {
+    console.error('Error updating task status:', error);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+};
+
+
+module.exports = { signup, authenticateUser, signin, signout, createTask, getTasksForUser, updateTaskDetails, deleteTask, updateTaskStatus}
