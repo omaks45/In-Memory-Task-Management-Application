@@ -156,4 +156,33 @@ const getTasksForUser = async (req, res) => {
 };
 
 
-module.exports = { signup, authenticateUser, signin, signout, createTask, getTasksForUser}
+// Function to update details of a user's task
+const updateTaskDetails = async (req, res) => {
+  try {
+    // Extract user ID from the request
+    const userId = req.user._id;
+
+    // Extract task ID and updated details from the request body
+    const { taskId, updatedDetails } = req.body;
+
+    // Find and update the task by ID and user ID
+    const updatedTask = await Task.findOneAndUpdate(
+      { _id: taskId, user: userId },
+      { $set: updatedDetails },
+      { new: true }
+    );
+
+    if (!updatedTask) {
+      // Task not found or user does not have permission to update the task
+      return res.status(404).json({ success: false, message: 'Task not found or unauthorized' });
+    }
+
+    res.status(200).json({ success: true, task: updatedTask });
+  } catch (error) {
+    console.error('Error updating task details:', error);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+};
+
+
+module.exports = { signup, authenticateUser, signin, signout, createTask, getTasksForUser, updateTaskDetails}

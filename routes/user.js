@@ -1,5 +1,5 @@
 const express = require('express')
-const {signup, authenticateUser, signin, signout, createTask, getTasksForUser} = require('../controller/user')
+const {signup, authenticateUser, signin, signout, createTask, getTasksForUser, updateTaskDetails} = require('../controller/user')
 const router = express.Router()
 const {check} = require('express-validator')
 
@@ -25,4 +25,7 @@ router.post('/createTask', authenticateUser, createTask)
  router.get('/view', authenticateUser, getTasksForUser)
 
 
+ //task update
+ router.put('/update', authenticateUser, updateTaskDetails)
+ 
 module.exports = router
