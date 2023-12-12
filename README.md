@@ -37,7 +37,7 @@ Status code                         Description
 404                                 Not found: when the requested result is not found on the server
 500                                 Internal server error: when an unexpected condition is encountered on the server.
 
-Endpoints:
+Authentication Endpoints:
 
 Signin contains both the successful and error endpoints 
 
@@ -92,7 +92,7 @@ response message:
     "err": "Password at least should be 6 characters"
 }
 
-login endpoins:
+login endpoints:
 http://localhost:5000/api/login
 {
     "email": "MarkLens45@gmail.com",
@@ -124,4 +124,61 @@ response message:
 response message:
 {
     "error": "Email and password do not match"
+}
+
+signout endpoints:
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTc3ZTU3ZmNiZTFkYmUyOWM1NDMxNGIiLCJpYXQiOjE3MDIzNTcxODB9.0UUK2sF_EfHJQGIcfjsahQPPji2BqYmAMUPoWZkyf3w"
+}
+response message:
+{
+    "message": "User signed out successfully"
+}
+
+Task creation endpoints:
+
+{
+    "user": "6577e57fcbe1dbe29c54314b",
+    "title": "devfest event",
+    "description": "An event where I get to meet like minds, network and learn something new",
+    "dueDate": "2023-12-25"
+}
+response:
+{
+    "success": true,
+    "task": {
+        "user": "6577e57fcbe1dbe29c54314b",
+        "title": "devfest event",
+        "description": "An event where I get to meet like minds, network and learn something new",
+        "dueDate": "2023-12-25T00:00:00.000Z",
+        "status": "Pending",
+        "_id": "6577f139cbe1dbe29c543152",
+        "createdDate": "2023-12-12T05:35:53.326Z",
+        "__v": 0
+    }
+}
+request error: When the user does not attach the token to the header
+{
+    "user": "6577e57fcbe1dbe29c54314b",
+    "title": "devfest event",
+    "description": "An event where I get to meet like minds, network and learn something new",
+    "dueDate": "2023-12-25"
+}
+
+response:
+{
+    "message": "Unauthorized"
+}
+
+request error: When the user ID is not a part of the json request
+{
+    "title": "devfest event",
+    "description": "An event where I get to meet like minds, network and learn something new",
+    "dueDate": "2023-12-25"
+}
+
+response:
+{
+    "success": false,
+    "message": "Internal Server Error"
 }
