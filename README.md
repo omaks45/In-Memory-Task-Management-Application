@@ -18,6 +18,7 @@ Content-Type: application/json
     "password": "AdenijiEnoch23"
 }
 A token is generated with the json code format above which will be added to the header to authorize the user to access the app
+
 Authentication Error:
 If the token is not passed to the authorization header, the user receives an error message indicating unauthorized. i.e he/she would not be permitted to access the app.
 
