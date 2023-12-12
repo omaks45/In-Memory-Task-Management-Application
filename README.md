@@ -24,3 +24,14 @@ If the token is not passed to the authorization header, the user receives an err
 The server sends the JWT back to the client/user as part of the authentication response. The client can store this token securely, typically in a secure HTTP-only cookie or local storage.
 If the JWT has an expiration time, and the client needs to continue making requests, it may need to refresh the token before it expires.
 The client can request a new JWT using a refresh token or by re-authenticating.i.e login again.
+
+Base Url:
+http://localhost:5000/api
+
+Status code                         Description
+200                                 ok: successful and server returned requested data
+201                                 created: successful and a new resources is created
+400                                 Bad request: when request is missing required parameter
+401                                 unauthorized: when the token is not valid
+404                                 Not found: when the requested result is not found on the server
+500                                 Internal server error: when an unexpected condition is encountered on the server.
